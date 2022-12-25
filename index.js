@@ -219,7 +219,7 @@
                     body = `this.location.col+=match[0].length`;
                 }
             } else {
-                body = `const data={type:${JSON.stringify(type)},match:match[0],value:${value},...this.location,index:match.index,lineFeeds:0}`;
+                body = `const data={${options.error?'error:true,':''}type:${JSON.stringify(type)},match:match[0],value:${value},...this.location,index:match.index,lineFeeds:0}`;
                 if (options.lineBreaks) {
                     body = `${body};data.lineFeeds=this.lineBreak(match[0])`;
                 } else {
@@ -288,7 +288,7 @@
     }
 
     return {
-        error: { match: /\W+|\s+/, error: true },
+        error: { match: /\w+|\s+|[^\w\s]+/, error: true },
         compile, states
     };
 }));

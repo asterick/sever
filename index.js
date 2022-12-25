@@ -34,7 +34,7 @@
     if (typeof module === 'object' && module.exports) {
         module.exports = factory()
     } else {
-        root.tokenize = factory()
+        root.sever = factory()
     }
 }(this, function() {
     'use strict';
@@ -64,8 +64,8 @@
 
         reset (source, state = null) {
             if (state) {
-                const { lastIndex } = state;
-                this.regExp.lastIndex = lastIndex;
+                const { offset } = state;
+                this.regExp.lastIndex = offset;
                 Object.assign(this.location, state);
             } else {
                 this.regExp.lastIndex = 0;
@@ -76,7 +76,7 @@
         }
 
         save () {
-            return { ... this.location, index: this.regExp.lastIndex };
+            return { ... this.location, offset: this.regExp.lastIndex };
         }
 
         has (name) {
@@ -129,13 +129,13 @@
         }
 
         // == Debug ==
-        formatError (token, error = "Error") {
+        formatError (token) {
             const lineExp = /.*/y;
-            lineExp.lastIndex = token.index - token.col + 1;
+            lineExp.lastIndex = token.offset - token.col + 1;
             const line = lineExp.exec(this.source);
-            console.log(this.source.substring(token.index - token.col + 1))
+            console.log(this.source.substring(token.offset - token.col + 1))
 
-            return `Error: ${error} at line ${token.line} col ${token.col}:\n\n${line}\n${" ".repeat(token.col-1)}^`;
+            return `Error: ${token.type || "Error"} at line ${token.line} col ${token.col}:\n\n${line}\n${" ".repeat(token.col-1)}^`;
         }
 
         debug () {
@@ -218,12 +218,16 @@
             let body;
             if (options.discard) {
                 if (options.lineBreaks) {
-                    body = `this.lineBreak(match[0]);`
+                    if (typeof options.lineBreaks === "number") {
+                        `this.location.col=0;this.location.line+=${options.lineBreaks}`
+                    } else {
+                        body = `this.lineBreak(match[0]);`;
+                    }
                 } else {
                     body = `this.location.col+=match[0].length`;
                 }
             } else {
-                body = `const data={${options.error?'error:true,':''}type:${JSON.stringify(type)},match:match[0],value:${value},...this.location,index:match.index,lineFeeds:0}`;
+                body = `const data={${options.error?'error:true,':''}type:${JSON.stringify(type)},match:match[0],value:${value},...this.location,offset:match.index,lineFeeds:0}`;
                 if (options.lineBreaks) {
                     body = `${body};data.lineFeeds=this.lineBreak(match[0])`;
                 } else {

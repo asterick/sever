@@ -148,6 +148,10 @@
         }
     }
 
+    function isTokenObject(token) {
+        return typeof token === "object" && token.match;
+    }
+
     function toRegExp(token) {
         if (typeof token === "string") {
             return token.replace(regExpSpecial, '\\$1');
@@ -163,14 +167,14 @@
 
     function* matchExpressions(states) {
         for (const [type, token] of Object.entries(states)) {
-            if (Array.isArray(token) && token.length >= 1 && token[0].match) {
+            if (Array.isArray(token) && token.length >= 1 && isTokenObject(token[0])) {
                 for (let child of token) {
-                    if (typeof child !== "object" || !child.match) {
+                    if (!isTokenObject(child)) {
                         throw new Error("Bad topology");
                     }
                     yield [type, toRegExp(child.match), token];
                 }
-            } else if (typeof token === "object" && token.match) {
+            } else if (isTokenObject(token)) {
                 yield [type, toRegExp(token.match), token]
             } else {
                 yield [type, toRegExp(token), {}]

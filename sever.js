@@ -207,12 +207,10 @@
             // == Update line/column ==
             let body;
             if (options.discard) {
-                if (options.lineBreaks) {
-                    if (typeof options.lineBreaks === "number") {
-                        `this.location.col=1;this.location.line+=${options.lineBreaks}`
-                    } else {
-                        body = `this.lineBreak(match[0]);`;
-                    }
+                if (typeof options.lineBreaks === "number") {
+                    body = `this.location.col=1;this.location.line+=${options.lineBreaks}`
+                } else if (options.lineBreaks) {
+                    body = `this.lineBreak(match[0]);`;
                 } else {
                     body = `this.location.col+=match[0].length`;
                 }

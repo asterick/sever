@@ -54,6 +54,34 @@ describe('match options', () => {
         );
     });
 
+    test('simple lineBreaks track column correctly while discarded', () => {
+        const lexer = sever.compile({
+            identifier: /\w+/,
+            lineFeed: { match: /\r\n?|\n\r?/, lineBreaks: 1, discard: true },
+            WS: { match: /\s/, discard: true }
+        });
+
+        lexer.reset("\r\n\r\n  asdf\n\r\r\n    asdf");
+
+        expect(lexer.next()).toEqual(
+            expect.objectContaining({
+                offset: 6,
+                line: 3,
+                col: 3,
+                type: "identifier"
+            })
+        );
+
+        expect(lexer.next()).toEqual(
+            expect.objectContaining({
+                offset: 18,
+                line: 5,
+                col: 5,
+                type: "identifier"
+            })
+        );
+    });
+
     test('lineBreaks can count line feeds', () => {
         const lexer = sever.compile({
             identifier: /\w+/,

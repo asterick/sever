@@ -61,7 +61,7 @@ describe('match options', () => {
             WS: { match: /\s/, discard: true }
         });
 
-        lexer.reset("\r\n\r\n  asdf\n\r\r\n    asdf");
+        lexer.reset("\r\n\r\n  asdf\n\r\r\n    asdf  asdf");
 
         expect(lexer.next()).toEqual(
             expect.objectContaining({
@@ -88,13 +88,22 @@ describe('match options', () => {
             WS: { match: /\s+/, discard: true, lineBreaks: true }
         });
 
-        lexer.reset("   \r\n\r\n   asdf");
+        lexer.reset("   \r\n\r\n   asdf  asdf");
 
         expect(lexer.next()).toEqual(
             expect.objectContaining({
                 offset: 10,
                 line: 3,
                 col: 4,
+                type: "identifier"
+            })
+        );
+
+        expect(lexer.next()).toEqual(
+            expect.objectContaining({
+                offset: 16,
+                line: 3,
+                col: 10,
                 type: "identifier"
             })
         );

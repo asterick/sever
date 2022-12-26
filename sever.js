@@ -34,6 +34,7 @@
     if (typeof module === 'object' && module.exports) {
         module.exports = factory()
     } else {
+        /* istanbul ignore next */
         root.sever = factory()
     }
 }(this, function() {
@@ -136,15 +137,6 @@
             console.log(this.source.substring(token.offset - token.col + 1))
 
             return `Error: ${token.type || "Error"} at line ${token.line} col ${token.col}:\n\n${line}\n${" ".repeat(token.col-1)}^`;
-        }
-
-        debug () {
-            console.log("Stack", this.stack);
-            console.log("Done", this.done);
-            console.log("RegExp", this.regExp);
-            console.log("Next", this.next.toString());
-            console.log("Location", JSON.stringify(this.location));
-            console.log("States", this.states);
         }
     }
 

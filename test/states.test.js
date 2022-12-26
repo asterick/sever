@@ -1,7 +1,7 @@
 const { describe, expect, test } = require('@jest/globals');
 const sever = require("..");
 
-describe('can be stateful', () => {
+describe('stateful lexers', () => {
     test('next works as expected', () => {
         const lexer = sever.states({
             main: {

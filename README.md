@@ -26,7 +26,7 @@ This results in a few trade offs:
 Usage
 -----
 
-Basic installation is as follows: `npm install sever` for a node like environment, alternatively, you can include `sever.js` in a script tag directly.
+Basic installation is as follows: `npm install sever-tokens` for a node like environment, alternatively, you can include `sever.js` in a script tag directly.
 
 ```js
 const lexer = tokenizer.compile({

@@ -118,6 +118,14 @@ lexer.next(); // { type: 'Error', value: 'BadToken', error: true, ... }
 class Tokenize
 --------------
 
+* [.reset](#tokenizeresetsource-state): Reset tokenizer state
+* [.next](#tokenizenext): Get next token in string
+* [.*\[Symbol.iterator](#tokenizesymboliterator): Create itereator
+* [.save](#tokenizesave): Preserve state
+* [.has](#tokenizehastoken): Check for token presense
+* [.formatError](#tokenizeformaterrortoken): Format token as error
+
+
 ## Tokenize.reset(source, state?) ##
 
 Initialize the tokenizer, or restore it to a previous state.
@@ -133,11 +141,11 @@ Returns the next matched token in the provided source
 * **`text`**: the string that was matched.
 * **`value`**: the string that was matched, transformed by your `value` function (if any).
 * **`offset`**: the number of bytes from the start of the buffer where the match starts.
-* **`lineBreaks`**: the number of line breaks found in the match. (Always zero if this rule has `lineBreaks: false`.)
+* **`lineBreaks`**: the number of line breaks found in the match. (Always zero if this rule does not have `lineBreaks`)
 * **`line`**: the line number of the beginning of the match, starting from 1.
 * **`col`**: the column where the match begins, starting from 1.
 
-## *\[Symbol.iterator] ##
+## Tokenize.*\[Symbol.iterator] ##
 
 Provides iterator support.
 
@@ -162,6 +170,7 @@ Returns a formatted message describing the token.  Useful for printing debug inf
 
 ```
 Error: BadOperator at line 5 col 15:
+
 This is a?failure
          ^
 ```
@@ -260,4 +269,42 @@ If you provided a regular expression with ordered capture groups, they will be p
 
 ### States ###
 
-I need to describe how states work in depth.
+States provide a method for dynamically changing the pool of matchable tokens available to the lexer on the fly.  This is useful for context sensitive parsing where you may need to be aware of a feature that has appeared before that could affect future parsing, such as strings.  This can be done in a direct swap, or as a stack operations.
+
+```js
+const lexer = sever.states({
+    main: {
+        'string': { match: '"', next: 'string' },
+        'WS': /s+/,
+        'identifier': /\w+/
+    },
+    string: {
+        'end': { '"', discard: true },
+        'escaped': { match: /\\./, value: (v) => JSON.parse(`'${v}'`) },
+        'char': /./
+    }
+});
+```
+
+Additionally, context can be done on a stack basis, in the case of nexted operations.  The stack can only move one level at a time, regardless what the value provided to `pop` may be.
+
+```js
+const common = {
+    open_words: { match: '{', push: 'words', discard: true },
+    open_numbers: { match: '[', push: 'numbers', discard: true },
+    close_words: { match: '}', pop: 1, discard: true },
+    close_numbers: { match: ']', pop: 1, discard: true },
+    WS: { match:/\s+/, discard: true },
+};
+
+const lexer = sever.states({
+    words: {
+        ... common,
+        word: /[a-z]+/
+    },
+    numbers: {
+        ... common,
+        number: /[0-9]+/
+    }
+});
+```

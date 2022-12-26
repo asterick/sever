@@ -5,12 +5,12 @@ Sever
 
 Sever is a mostly-optimized tokenizer/lexer generator.  It is designed to support back-references, capture groups and modern language features while maintaining compatiblity with most of the ![🐄 moo](https://github.com/no-context/moo/) API.
 
-* ![Why not just use moo](#why-not-just-use-moo)
-* ![Usage](#usage)
-* ![API](#api)
-* ![Tokenizer](#class-tokenize)
-* ![Optioned Token](#optioned-token)
-* ![States](#states)
+* [Why not just use moo](#why-not-just-use-moo)
+* [Usage](#usage)
+* [API](#api)
+* [Tokenizer](#class-tokenize)
+* [Optioned Token](#optioned-token)
+* [States](#states)
 
 Why not just use moo?
 ---------------------
@@ -50,7 +50,7 @@ const lexer = tokenizer.compile({
 });
 ```
 
-Finally, you must feed a source file to the returned ![Tokenizer](#class-tokenize).
+Finally, you must feed a source file to the returned [Tokenizer](#class-tokenize).
 
 ```js
 lexer.reset('Hello world');
@@ -64,7 +64,7 @@ API
 ## sever.compile(tokens) ##
 
 Generates a lexer.  Tokens must be an object providing keys (Token type name), and values (matching option for type).
-** Order of matches determines priority **.  Returns a ![Tokenizer](#class-tokenize),
+** Order of matches determines priority **.  Returns a [Tokenizer](#class-tokenize),
 
 ```js
 sever.compile({
@@ -80,7 +80,7 @@ Matching objects can be:
 * Literal string
 * RegExp object
 * Array of Matching objects
-* ![Optioned Token](#optioned-token)
+* [Optioned Token](#optioned-token)
 
 ## sever.states(states) ##
 
@@ -172,15 +172,15 @@ Optioned Token
 Some tokens require a little more complex matching than a basic regular expression or literal string.
 
 ## Token Options ##
-* **![`.match`](#match) (required)**: Matching pattern for token
-* **![`.value`](#value)**: Value transformation function
-* **![`.error`](#error)**: Token should be treated as a failure
-* **![`.push`](#states)**: Push state to stack, and swap context
-* **![`.pop`](#states)**: Restore previously pushed context from stack
-* **![`.next`](#states)**: Set context to new state
-* **![`.discard`](#discard)**: Match but discard token
-* **![`.wordBound`](#wordbound)**: Token is word bound
-* **![`.lineBreaks`](#lineBreaks)**: Token may contain linebreaks
+* **[`.match`](#match) (required)**: Matching pattern for token
+* **[`.value`](#value)**: Value transformation function
+* **[`.error`](#error)**: Token should be treated as a failure
+* **[`.push`](#states)**: Push state to stack, and swap context
+* **[`.pop`](#states)**: Restore previously pushed context from stack
+* **[`.next`](#states)**: Set context to new state
+* **[`.discard`](#discard)**: Match but discard token
+* **[`.wordBound`](#wordbound)**: Token is word bound
+* **[`.lineBreaks`](#lineBreaks)**: Token may contain linebreaks
 
 ### `match` ###
 

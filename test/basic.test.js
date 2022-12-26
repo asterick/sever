@@ -87,7 +87,7 @@ describe('basic functionality', () => {
             col: 1,
             line: 1,
             offset: 0,
-            lineFeeds: 0
+            lineBreaks: 0
         });
 
         /* Run a first pass, preserving the results */

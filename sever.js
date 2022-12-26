@@ -134,7 +134,6 @@
             const lineExp = /.*/y;
             lineExp.lastIndex = token.offset - token.col + 1;
             const line = lineExp.exec(this.source);
-            console.log(this.source.substring(token.offset - token.col + 1))
 
             return `Error: ${token.type || "Error"} at line ${token.line} col ${token.col}:\n\n${line}\n${" ".repeat(token.col-1)}^`;
         }
@@ -153,7 +152,6 @@
             return token.map(toRegExp).join("|");
         }
 
-        console.log(token)
         throw new Error("Unhandled type, expected String, RegExp, or Array[RegExp, Spring]")
     }
 
@@ -211,7 +209,7 @@
             if (options.discard) {
                 if (options.lineBreaks) {
                     if (typeof options.lineBreaks === "number") {
-                        `this.location.col=0;this.location.line+=${options.lineBreaks}`
+                        `this.location.col=1;this.location.line+=${options.lineBreaks}`
                     } else {
                         body = `this.lineBreak(match[0]);`;
                     }
@@ -219,9 +217,11 @@
                     body = `this.location.col+=match[0].length`;
                 }
             } else {
-                body = `const data={${options.error?'error:true,':''}type:${JSON.stringify(type)},match:match[0],value:${value},...this.location,offset:match.index,lineFeeds:0}`;
-                if (options.lineBreaks) {
-                    body = `${body};data.lineFeeds=this.lineBreak(match[0])`;
+                body = `const data={${options.error?'error:true,':''}type:${JSON.stringify(type)},match:match[0],value:${value},...this.location,offset:match.index,lineBreaks:0}`;
+                if (typeof options.lineBreaks === "number") {
+                    body = `${body};data.lineBreaks=${options.lineBreaks};this.location.col=1;this.location.line+=data.lineBreaks`
+                } else if (options.lineBreaks) {
+                    body = `${body};data.lineBreaks=this.lineBreak(match[0])`;
                 } else {
                     body = `${body};this.location.col+=match[0].length`;
                 }

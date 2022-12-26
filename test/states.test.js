@@ -25,7 +25,7 @@ describe('stateful lexers', () => {
             col: 1,
             line: 1,
             offset: 0,
-            lineFeeds: 0
+            lineBreaks: 0
         });
 
         expect(lexer.next()).toEqual({
@@ -35,7 +35,7 @@ describe('stateful lexers', () => {
             col: 8,
             line: 1,
             offset: 7,
-            lineFeeds: 0
+            lineBreaks: 0
         });
 
         expect(lexer.next()).toEqual({
@@ -45,7 +45,7 @@ describe('stateful lexers', () => {
             col: 10,
             line: 1,
             offset: 9,
-            lineFeeds: 0
+            lineBreaks: 0
         });
 
         expect(lexer.next()).toEqual({
@@ -55,7 +55,7 @@ describe('stateful lexers', () => {
             col: 13,
             line: 1,
             offset: 12,
-            lineFeeds: 0
+            lineBreaks: 0
         });
     });
 

@@ -3,7 +3,7 @@
 Sever
 =====
 
-Sever is a mostly-optimized tokenizer/lexer generator.  It is designed to support back-references, capture groups and modern language features while maintaining compatiblity with most of the ![https://raw.githubusercontent.com/no-context/moo/](🐄 moo) API.
+Sever is a mostly-optimized tokenizer/lexer generator.  It is designed to support back-references, capture groups and modern language features while maintaining compatiblity with most of the ![🐄 moo](https://github.com/no-context/moo/) API.
 
 * ![Why not just use moo](#why-not-just-use-moo)
 * ![Usage](#usage)

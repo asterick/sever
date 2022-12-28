@@ -1,6 +1,6 @@
 {
   "name": "sever-tokens",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A moo compatible tokenizer/lexer generator, sacrificing some performance for features.",
   "main": "sever.js",
   "directories": {

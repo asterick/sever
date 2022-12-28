@@ -82,7 +82,7 @@ describe('basic functionality', () => {
         lexer.reset(source);
         expect(lexer.next()).toEqual({
             type: 'Identifier',
-            match: 'Hello',
+            text: 'Hello',
             value: 'Hello',
             col: 1,
             line: 1,
@@ -104,4 +104,66 @@ describe('basic functionality', () => {
             expect(token).toEqual(lexer.next());
         }
     });
+
+    test('can support arrays of optioned tokens', () => {
+        const lexer = sever.compile({
+            WS: { match: /\s+/, discard: true },
+            Number: [
+                { match: /0[xX]([\da-fA-F]+)(\.[\da-fA-F]+)?([pP][-+]?[\da-fA-F]+)?/, value: (_, int, frac, exp) => _ },
+                { match: /(\d+)(\.\d+)?([eE][-+]?\d+)?/, value: (_, int, frac, exp) => _ },
+            ]
+        });
+
+        lexer.reset("3 345 0xff 0xBEBADA 3.0 3.1416 314.16e-2 0.31416E1 34e1 0x0.1E 0xA23p-4 0X1.921FB54442D18P+1");
+
+        expect(lexer.next()).toEqual(expect.objectContaining({
+            text: "3"
+        }));
+
+        expect(lexer.next()).toEqual(expect.objectContaining({
+            text: "345"
+        }));
+
+        expect(lexer.next()).toEqual(expect.objectContaining({
+            text: "0xff"
+        }))
+
+        expect(lexer.next()).toEqual(expect.objectContaining({
+            text: "0xBEBADA"
+        }))
+
+        expect(lexer.next()).toEqual(expect.objectContaining({
+            text: "3.0"
+        }))
+
+        expect(lexer.next()).toEqual(expect.objectContaining({
+            text: "3.1416"
+        }))
+
+        expect(lexer.next()).toEqual(expect.objectContaining({
+            text: "314.16e-2"
+        }))
+
+        expect(lexer.next()).toEqual(expect.objectContaining({
+            text: "0.31416E1"
+        }))
+
+        expect(lexer.next()).toEqual(expect.objectContaining({
+            text: "34e1"
+        }))
+
+        expect(lexer.next()).toEqual(expect.objectContaining({
+            text: "0x0.1E"
+        }))
+
+        expect(lexer.next()).toEqual(expect.objectContaining({
+            text: "0xA23p-4"
+        }))
+
+        expect(lexer.next()).toEqual(expect.objectContaining({
+            text: "0X1.921FB54442D18P+1"
+        }))
+
+        expect(lexer.next()).toBeUndefined();
+    })
 });

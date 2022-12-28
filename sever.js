@@ -162,7 +162,7 @@
                     if (!isTokenObject(child)) {
                         throw new Error("Bad topology");
                     }
-                    yield [type, toRegExp(child.match), token];
+                    yield [type, toRegExp(child.match), child];
                 }
             } else if (isTokenObject(token)) {
                 yield [type, toRegExp(token.match), token]
@@ -215,7 +215,7 @@
                     body = `this.location.col+=match[0].length`;
                 }
             } else {
-                body = `const data={${options.error?'error:true,':''}type:${JSON.stringify(type)},match:match[0],value:${value},...this.location,offset:match.index,lineBreaks:0}`;
+                body = `const data={${options.error?'error:true,':''}type:${JSON.stringify(type)},text:match[0],value:${value},...this.location,offset:match.index,lineBreaks:0}`;
                 if (typeof options.lineBreaks === "number") {
                     body = `${body};data.lineBreaks=${options.lineBreaks};this.location.col=1;this.location.line+=data.lineBreaks`
                 } else if (options.lineBreaks) {

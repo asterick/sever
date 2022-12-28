@@ -30,7 +30,7 @@ describe('error conditions', () => {
         expect(err).toEqual(expect.objectContaining({
             error: true,
             type: 'error',
-            match: '!'
+            text: '!'
         }));
 
         const formatted = lexer.formatError(err).replace(/\r\n?|\n\r?/g,"\n");

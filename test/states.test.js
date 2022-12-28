@@ -20,7 +20,7 @@ describe('stateful lexers', () => {
 
         expect(lexer.next()).toEqual({
             type: 'word',
-            match: 'Ident ',
+            text: 'Ident ',
             value: 'Ident ',
             col: 1,
             line: 1,
@@ -30,7 +30,7 @@ describe('stateful lexers', () => {
 
         expect(lexer.next()).toEqual({
             type: 'escaped',
-            match: '\\n',
+            text: '\\n',
             value: '\\n',
             col: 8,
             line: 1,
@@ -40,7 +40,7 @@ describe('stateful lexers', () => {
 
         expect(lexer.next()).toEqual({
             type: 'character',
-            match: '1',
+            text: '1',
             value: '1',
             col: 10,
             line: 1,
@@ -50,7 +50,7 @@ describe('stateful lexers', () => {
 
         expect(lexer.next()).toEqual({
             type: 'word',
-            match: 'Ident',
+            text: 'Ident',
             value: 'Ident',
             col: 13,
             line: 1,

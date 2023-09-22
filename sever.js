@@ -80,7 +80,6 @@
                 location: { ... this.location },
                 stack: [... this.stack],
                 regExp: this.regExp,
-                done: this.done,
                 next: this.next,
 
                 offset: this.regExp.lastIndex

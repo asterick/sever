@@ -40,7 +40,7 @@
 }(this, function() {
     'use strict';
 
-    const regExpSpecial = /(\/|\.|\*|\+|\?|\||\(|\)|\[|\]|\{|\}|\\|\\^)/g;
+    const regExpSpecial = /(\/|\.|\*|\+|\?|\||\(|\)|\[|\]|\{|\}|\\|\^)/g;
     const lineBreakExp = /\r\n?|\n\r?/gm;
     let safeNameIndex = 0;
 

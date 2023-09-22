@@ -40,7 +40,7 @@
 }(this, function() {
     'use strict';
 
-    const regExpSpecial = /(\/|\.|\*|\+|\?|\||\(|\)|\[|\]|\{|\}|\\|\^)/g;
+    const regExpSpecial = /(\/|\.|\*|\+|\?|\||\(|\)|\[|\]|\{|\}|\\|\^|\$)/g;
     const lineBreakExp = /\r\n?|\n\r?/gm;
     let safeNameIndex = 0;
 
@@ -64,20 +64,27 @@
         }
 
         reset (source, state = null) {
+            this.source = source;
+            this.done = false;
+
             if (state) {
-                const { offset } = state;
-                this.regExp.lastIndex = offset;
-                Object.assign(this.location, state);
+                Object.assign(this, state);
+                this.regExp.lastIndex = state.offset;
             } else {
                 this.regExp.lastIndex = 0;
             }
-
-            this.source = source;
-            this.done = false;
         }
 
         save () {
-            return { ... this.location, offset: this.regExp.lastIndex };
+            return {
+                location: { ... this.location },
+                stack: [... this.stack],
+                regExp: this.regExp,
+                done: this.done,
+                next: this.next,
+
+                offset: this.regExp.lastIndex
+            };
         }
 
         has (name) {
